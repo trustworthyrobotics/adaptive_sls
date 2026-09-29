@@ -1,0 +1,22 @@
+**/jax_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.cache/
+*.egg-info/
+
+# Generated experiment artifacts
+*.png
+*.mp4
+*.npy
+*.npz
+
+# Other regenerated publication and media outputs
+*.pdf
+*.tex
+*.webm
+*.gif
+*.csv
+*.tsv
+*.log
