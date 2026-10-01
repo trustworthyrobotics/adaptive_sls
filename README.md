@@ -2,7 +2,7 @@
 
 This repository contains the shareable implementation and experiment code for **Planning to Learn: Real-Time Robust Adaptive Control on the GPU with Guaranteed Future Learning**.
 
-**Links:** [Website](https://trustworthyrobotics.github.io/adaptive_sls/) | [Paper](https://trustworthyrobotics.github.io/adaptive_sls/paper/root.pdf) | [Video](https://trustworthyrobotics.github.io/adaptive_sls/#crazyflie-video)
+**Links:** [Website](https://https://trustworthyrobotics.github.io/adaptive_sls/) | [Paper](https://trustworthyrobotics.github.io/adaptive_sls/paper/root.pdf) | [Video](https://trustworthyrobotics.github.io/adaptive_sls/#crazyflie-video)
 
 A-SLS is a robust adaptive model-predictive-control framework built on system-level synthesis. It augments the physical state with online parameter estimates, propagates correlated disturbance and estimation uncertainty, and accounts for guaranteed future learning while planning. The GPU-parallel solver is designed for long-horizon nonlinear robotic systems and was evaluated on Dubins-car, quadrotor, planar-quadrotor, quadruped, and Crazyflie problems, including systems with up to 61 states, 8 uncertain parameters, and 12 control inputs.
 
