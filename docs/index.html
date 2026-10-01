@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A-SLS: real-time robust adaptive control with guaranteed future learning.">
+    <meta property="og:title" content="Planning to Learn: A-SLS">
+    <meta property="og:description" content="Real-time robust adaptive control on the GPU with guaranteed future learning.">
+    <meta property="og:type" content="website">
+    <title>Planning to Learn: A-SLS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/computer-modern/cmu-serif.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <header class="hero" id="top">
+      <div class="hero-copy wrap">
+        <p class="eyebrow">Preprint</p>
+        <h1>Planning to Learn: Real-Time Robust Adaptive Control on the GPU with Guaranteed Future Learning</h1>
+        <div class="authors">
+          <p>Anutam Srinivasan<sup>1</sup>, Siddhant Panse<sup>1</sup>, Glen Chou<sup>2</sup></p>
+          <p><sup>1</sup>Georgia Institute of Technology, School of Electrical &amp; Computer Engineering<br><sup>2</sup>Georgia Institute of Technology, Schools of Cybersecurity &amp; Privacy and Aerospace Engineering</p>
+        </div>
+        <div class="pills">
+          <a class="pill" href="paper/root.pdf">
+            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+            <span>Paper</span>
+          </a>
+          <a class="pill" href="https://github.com/trustworthyrobotics/adaptive_sls">
+            <i class="fab fa-github" aria-hidden="true"></i>
+            <span>Code</span>
+          </a>
+          <a class="pill" href="#results">
+            <i class="fab fa-youtube" aria-hidden="true"></i>
+            <span>Video</span>
+          </a>
+        </div>
+      </div>
+      <div class="wrap hero-media">
+        <video id="crazyflie-video" autoplay muted loop playsinline preload="metadata" aria-label="Crazyflie drone demonstrating adaptive control">
+          <source src="media/crazyflie_dark_hero_hq_draft.mp4" type="video/mp4">
+        </video>
+        <p class="caption">A Crazyflie (a) learns an uncertain thrust-to-acceleration parameter while stabilizing in flight. It learns the parameter (b), reaches the target altitude (c), and robustly maintains the thrust limit (d).</p>
+      </div>
+    </header>
+
+    <main>
+      <section class="section wrap narrow" id="overview">
+        <h3 class="section-title">Abstract</h3>
+        <p>Robots must act safely even when their dynamics are uncertain. Robust control can protect against unknown disturbances, but it may be overly cautious when uncertainty comes from physical parameters—such as mass, friction, wind, or motor strength—that can be learned through interaction. Many adaptive controllers update their parameter estimates as data arrives, yet plan as if the initial uncertainty will persist throughout the planning horizon. This can produce unnecessarily large reachable tubes and prevent a robot from taking advantage of informative actions.</p>
+        <p>We present A-SLS, a learning-aware system-level synthesis (SLS) framework for robust adaptive control. It augments the physical state with online parameter estimates and models how those estimates evolve, preserving correlations among process disturbances, parameter errors, and estimate updates. This lets A-SLS forecast the parameter uncertainty guaranteed to remain after future observations and use that future learning when constructing reachable sets and planning safe trajectories. A GPU-compatible solver enables real-time robust adaptive model predictive control for long-horizon, high-dimensional nonlinear systems. Across robotic benchmarks, A-SLS reduces reachable-tube conservativeness while maintaining real-time performance, including whole-body control of a 61-state quadruped; a Crazyflie hardware demonstration shows online learning during flight.</p>
+      </section>
+
+      <section class="section section-tint" id="approach">
+        <div class="wrap narrow">
+          <h3 class="section-title">Method</h3>
+          <p>A-SLS makes parameter learning part of the system being controlled. After each action, it compares the observed state transition with the predicted one and uses the transition residual to update the parameter estimate and its bounded uncertainty set. The physical state and evolving estimate are then treated together as an augmented state.</p>
+          <p>For planning, A-SLS uses system-level synthesis (SLS) to build causal feedback responses that preserve the relationships between process disturbances, parameter error, and estimate updates. It forecasts how parameter uncertainty is guaranteed to shrink as future measurements arrive, then uses that reduction to construct tighter reachable tubes and plan safe trajectories. Since a trajectory affects what the robot can learn, A-SLS can also favor informative motions. Its GPU-parallel implementation scales adaptive optimization to longer planning horizons and higher-dimensional robotic systems.</p>
+        </div>
+        <div class="wrap feature-grid method-grid">
+          <article class="feature">
+            <span class="number">01</span><h3>Bounded parameter learning</h3>
+            <video autoplay muted loop playsinline preload="metadata" aria-label="Animation illustrating bounded parameter updates"><source src="media/parameter_update_icon.mp4" type="video/mp4"></video>
+            <p>Forecast the parameter uncertainty that will remain after future observations by bounding parameter error and parameter updates, so plans can account for learning in advance.</p>
+          </article>
+          <article class="feature">
+            <span class="number">02</span><h3>Augment system + SLS</h3>
+            <video autoplay muted loop playsinline preload="metadata" aria-label="Animation illustrating the augmented system state"><source src="media/augmented_system_icon.mp4" type="video/mp4"></video>
+            <p>Include online parameter estimates in the system state, making estimator evolution part of the closed-loop dynamics. Then apply SLS for robust planning.</p>
+          </article>
+          <article class="feature">
+            <span class="number">03</span><h3>Coupled reachable tubes</h3>
+            <video autoplay muted loop playsinline preload="metadata" aria-label="Animation comparing independent and coupled reachable tubes"><source src="media/independent_to_coupled_tube.mp4" type="video/mp4"></video>
+            <p>Preserve correlations among disturbances, parameter errors, and estimator updates to build tighter reachable sets, instead of stacking disturbances independently.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section wrap" id="results">
+        <div class="narrow result-intro">
+          <h3 class="section-title">Results</h3>
+          <p>We evaluate A-SLS as a robust trajectory optimizer and as a receding-horizon controller across nonlinear robotic systems, from Dubins cars to a quadruped and a Crazyflie drone.</p>
+        </div>
+        <div class="result-story">
+          <div class="result-copy"><p class="result-model">Dubins Car</p><h3>Assured learning enables tighter tubes</h3><p>On a Dubins car task with unmatched parameters, the controller plans through obstacles while accounting for dynamic uncertainty. Compared to baselines, A-SLS reduced positional tube volume to 6% and 26% of the CCM and DF baselines, respectively, while maintaining tube containment in the evaluated rollouts. The tighter tubes allow A-SLS to plan a shorter S-curve path.</p></div>
+          <figure><video autoplay muted loop playsinline preload="metadata" aria-label="Dubins car controller rollouts and reachable tubes"><source src="media/dubins_all_controller_rollouts_dark.mp4" type="video/mp4"></video><figcaption>The Dubins car plans a trajectory, reachable tubes, and rollouts under uncertain dynamics and parameters (a). A-SLS maintains tighter positional tubes (b-c) than baselines.</figcaption></figure>
+        </div>
+        <div class="result-story reverse">
+          <div class="result-copy"><p class="result-model">Quadrotor</p><h3>Actions can improve future knowledge</h3><p>For a 12-state quadrotor, an information-aware objective (A-SLS+) encourages trajectories that yield higher-fidelity parameter measurements. The quadrotor moves to a higher altitude with lower disturbances; the resulting reduction in parameter uncertainty tightens its predicted position tube and improves tracking compared to A-SLS.</p></div>
+          <figure><video autoplay muted loop playsinline preload="metadata" aria-label="Quadrotor trajectories and parameter uncertainty comparison"><source src="media/quadrotor_3d_parameter_comparison_dark.mp4" type="video/mp4"></video><figcaption>Quadrotor trajectories (a-b) and forecast wind-force parameter uncertainty and rollout parameter errors (c-e). A-SLS+ with information gathering yields better parameter measurements, reducing parameter uncertainty.</figcaption></figure>
+        </div>
+        <div class="result-story">
+          <div class="result-copy"><p class="result-model">Quadruped</p><h3>Scaling to whole-body MPC</h3><p>A-SLS controls a 61-state, 12-input quadruped while learning eight joint-damping parameters in a receding-horizon model predictive control (MPC) loop. Across 40 runs, it maintained safe obstacle clearance, with a median solve time of 16.1 ms, well within the 32 ms real-time control budget.</p></div>
+          <figure><video autoplay muted loop playsinline preload="metadata" aria-label="Quadruped learning joint damping with safe reachable tubes"><source src="media/quadruped_front_slide_parameter_tubes_dark_2x.mp4" type="video/mp4"></video><figcaption>Quadruped locomotion (a-b) using A-SLS as an MPC policy, while learning the joint damping parameters (c-f).</figcaption></figure>
+        </div>
+        <div class="hardware-note">
+          <!-- <p class="eyebrow">Hardware validation</p> -->
+          <p class="result-model">Crazyflie; Hardware Validation</p>
+          <h3>Learning on the fly</h3>
+          <p>On a Crazyflie, A-SLS learns an uncertain thrust-to-acceleration parameter capturing mass, battery level, and motor health effects on the thrust command. Across 15 hardware runs, the drone recovered from a fall caused by an overly high parameter guess by using transition residuals to converge to the true parameter. This was achieved while keeping a median solve time of 8.15 ms under a 50 ms control budget.</p>
+          <div class="pills hardware-video-link"><a class="pill" href="#crazyflie-video"><i class="fas fa-arrow-up" aria-hidden="true"></i><span>Watch Crazyflie video</span></a></div>
+        </div>
+      </section>
+    </main>
+    <section class="section citation-section" id="citation">
+      <div class="wrap narrow">
+        <h3 class="section-title">Cite</h3>
+        <div class="citation-block">
+          <button class="copy-button" type="button" aria-label="Copy BibTeX citation">Copy BibTeX</button>
+          <span class="copy-status" aria-live="polite"></span>
+          <pre><code id="citation-bib">@misc{srinivasan2026planning,
+  title  = {Planning to Learn: Real-Time Robust Adaptive Control on the GPU with Guaranteed Future Learning},
+  author = {Srinivasan, Anutam and Panse, Siddhant and Chou, Glen},
+  year   = {2026},
+  note   = {Preprint}
+}</code></pre>
+        </div>
+      </div>
+    </section>
+    <footer class="wrap"><span>A-SLS · Trustworthy Robotics Lab, Georgia Tech</span><a href="#top">Back to top ↑</a></footer>
+    <script>
+      const copyButton = document.querySelector('.copy-button');
+      const citationText = document.querySelector('#citation-bib').textContent;
+      const copyStatus = document.querySelector('.copy-status');
+      copyButton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(citationText);
+          copyStatus.textContent = 'Copied';
+        } catch {
+          copyStatus.textContent = 'Copy failed — select the BibTeX text above.';
+        }
+      });
+    </script>
+  </body>
+</html>
