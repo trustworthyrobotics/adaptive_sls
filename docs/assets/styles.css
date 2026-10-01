@@ -15,7 +15,7 @@
 .result-copy h3,.hardware-note h3{margin:0 0 14px;font-size:clamp(1.35rem,2.5vw,1.8rem);line-height:1.2}
 .result-copy p,.hardware-note p{margin:0;color:var(--muted);font-size:1rem;line-height:1.7}
 .hardware-note{max-width:780px;margin:64px auto 0;padding-top:36px;border-top:1px solid var(--line)}
-@media(max-width:700px){.result-story,.result-story.reverse{grid-template-columns:1fr;gap:20px;padding:34px 0}.result-story figure,.result-story.reverse figure{order:-1}.result-story .result-copy,.result-story.reverse .result-copy{order:0}.hero-copy{padding-top:52px}}
+@media(max-width:820px){.result-story,.result-story.reverse{grid-template-columns:minmax(0,1fr);gap:20px;padding:34px 0}.result-story figure,.result-story.reverse figure{order:-1}.result-story .result-copy,.result-story.reverse .result-copy{order:0}.hero-copy{padding-top:52px}}
 .section h2,.closing h2{font-family:var(--serif);font-weight:600;letter-spacing:-.025em}
 .feature h3,.result-copy h3,.hardware-note h3{font-family:var(--serif);font-weight:600;letter-spacing:-.025em}
 #results.wrap{max-width:1220px}
@@ -55,3 +55,4 @@
 .hardware-note{max-width:780px;margin:44px auto 0;padding:26px;border:1px solid var(--line);border-radius:12px;background:#0b0e12}
 .hardware-note{position:relative}
 .hardware-note::before{content:"";position:absolute;top:-23px;left:50%;transform:translateX(-50%);width:min(1220px,calc(100vw - 32px));height:1px;background:var(--line)}
+@media(max-width:820px){.result-story,.result-story.reverse{grid-template-columns:minmax(0,1fr);gap:20px;padding:34px 0}.result-story figure,.result-story.reverse figure{order:-1}.result-story .result-copy,.result-story.reverse .result-copy{order:0}}
