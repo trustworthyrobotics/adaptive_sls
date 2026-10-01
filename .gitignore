@@ -20,3 +20,10 @@ __pycache__/
 *.csv
 *.tsv
 *.log
+
+# Keep website videos in the repository
+!docs/media/**/*.mp4
+!docs/media/**/*.webm
+!docs/media/**/*.mov
+!docs/media/**/*.m4v
+!docs/media/**/*.avi
